@@ -1,0 +1,10 @@
+Notes for Things to be Included in the Report
+
+Histogram similarity measure
+- Decide on distance algorithm:
+	- Euclidean distance might be faster
+	- Chi-squared usually works better
+	- Try both and see difference in results/computation time
+- How many bins?
+	- 256 gives best result but takes time
+	- fewer bins means coarser representation

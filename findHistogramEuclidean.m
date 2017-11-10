@@ -23,7 +23,8 @@ greenhist = greenhist ./ sum(greenhist(:));
 bluehist = bluehist ./ sum(bluehist(:));
 
 % Compute euclidean distance between image histogram and all histograms in the matrix
-for j = 1 : 20
+m = size(hist_matrix, 2);
+for j = 1 : m
 	RGB_hist = cell2mat(hist_matrix(j));
 	red_distances(:,j) = sqrt(sum((redhist - RGB_hist(:,1)).^2));
 	green_distances(:,j) = sqrt(sum((greenhist - RGB_hist(:,2)).^2));

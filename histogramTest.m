@@ -1,6 +1,6 @@
 
-for i = 1:20
-	I = imread(sprintf('./Wallpapers/im%d.JPG',i));
+for i = 1:250
+	I = imread(sprintf('./images/natural/sun_ (%d)',i));
 	hR = imhist(I(:,:,1));
 	hR = hR ./ sum(hR(:));
 	hG = imhist(I(:,:,2));

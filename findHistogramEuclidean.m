@@ -9,13 +9,12 @@
 %	imindex:		The index of the most matching histogram in hist_matrix
 %%%
 
-function imindex = findHistogramEuclidean(hist_matrix, imlocation, nobins)
+function imindex = findHistogramEuclidean(hist_matrix, image, nobins)
 
 % Compute histogram of given image
-I = imread(imlocation);
-redhist = imhist(I(:,:,1), nobins);
-greenhist = imhist(I(:,:,2), nobins);
-bluehist = imhist(I(:,:,3), nobins);
+redhist = imhist(image(:,:,1), nobins);
+greenhist = imhist(image(:,:,2), nobins);
+bluehist = imhist(image(:,:,3), nobins);
 
 % Normalise the histograms
 redhist = redhist ./ sum(redhist(:));

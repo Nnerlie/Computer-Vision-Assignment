@@ -6,7 +6,7 @@ cells = imageTiler(image, 100, 100);
 
 % foreach image comparison
 for i = 1:250
-    I = imread(sprintf('./images/natural/sun_ (%d).jpg',i));
+    I = imread(sprintf('./images/natural/image_ (%d).jpg',i));
     I = cropImage(I, [x, y]);
     cropped{i} = I;
     

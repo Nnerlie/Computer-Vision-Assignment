@@ -8,3 +8,15 @@ Histogram similarity measure
 - How many bins?
 	- 256 gives best result but takes time
 	- fewer bins means coarser representation
+
+ChiSquared
+	- First run: 49.786s
+	- 250 images
+	- 256 bins
+	- 100x100
+
+Euclidean 
+	- First run: 89.578s
+	- 250 images
+	- 256 bins
+	- 100x100

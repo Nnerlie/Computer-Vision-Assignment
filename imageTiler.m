@@ -1,21 +1,20 @@
-tileSize = 800;
+function cells = imageTiler(image, tiles_x, tiles_y)
+    % Get the image's dimensions
+    [height, width, depth] = size(image);
 
-% Load the image and get its dimensions
-image = imread('image.jpg');
-[height, width, depth] = size(image);
+    % The size (px) of each whole row & column block within the image
+    tile_width = floor(height / tiles_x);
+    tile_height = floor(width / tiles_y);
 
-% The number of whole row & column blocks within the image
-rows = floor(height / tileSize);
-columns = floor(width / tileSize);
+    % the number of tiles 
+    tile_width = [tile_width * ones(1, tiles_x), rem(height, tiles_x)];
+    tile_height = [tile_height * ones(1, tiles_y), rem(width, tiles_y)];
 
-% the width of each row & column respectively
-rows = [tileSize * ones(1, rows), rem(height, tileSize)];
-columns = [tileSize * ones(1, columns), rem(width, tileSize)];
+    % convert to cells, last row & column will be uncomplete blocks
+    % they are removed to crop the image
+    cells = mat2cell(image, tile_width, tile_height, depth);
+    cells = cells(1:end-1,1:end-1);
 
-% convert to cells, last row & column will be uncomplete blocks
-% they are removed to crop the iamge
-cells = mat2cell(image, rows, columns, depth);
-cells = cells(1:end-1,1:end-1);
-
-% display the tile at position 2 2
-imshow(cells{2,2})
+    % display the tile at position 2 2
+    imshow(cells{2,2})
+end

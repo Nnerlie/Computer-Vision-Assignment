@@ -9,10 +9,10 @@
 %	imindex:		The index of the most matching histogram in hist_matrix
 %%%
 
-function imindex = findHistogramChisquared(hist_matrix, imlocation, nobins)
+function imindex = findHistogramChisquared(hist_matrix, I, nobins)
 
 % Compute histogram of given image
-I = imread(imlocation);
+% I = imread(imlocation);
 redhist = imhist(I(:,:,1), nobins);
 greenhist = imhist(I(:,:,2), nobins);
 bluehist = imhist(I(:,:,3), nobins);

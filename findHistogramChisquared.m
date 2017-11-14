@@ -23,7 +23,8 @@ greenhist = greenhist ./ sum(greenhist(:));
 bluehist = bluehist ./ sum(bluehist(:));
 
 % Compute chi-squared distance between image histogram and all histograms in the matrix
-for j = 1 : 20
+m = size(hsit_matrix, 2);
+for j = 1 : m
 	RGB_hist = cell2mat(hist_matrix(j));
 	red_divide = redhist + RGB_hist(:,1);
 	red_divide(red_divide == 0) = 1;

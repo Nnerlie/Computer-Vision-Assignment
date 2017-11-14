@@ -32,5 +32,5 @@ end
 % Sum up all the histogram columns (produces a vector of similarities)
 % Find the smallest distance
 % Return the index of that distance
-distances = red_distances + green_distances + blue_distances
+distances = red_distances + green_distances + blue_distances;
 [value, imindex] = min(distances);

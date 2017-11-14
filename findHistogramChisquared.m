@@ -23,7 +23,7 @@ greenhist = greenhist ./ sum(greenhist(:));
 bluehist = bluehist ./ sum(bluehist(:));
 
 % Compute chi-squared distance between image histogram and all histograms in the matrix
-m = size(hsit_matrix, 2);
+m = size(hist_matrix, 2);
 for j = 1 : m
 	RGB_hist = cell2mat(hist_matrix(j));
 	red_divide = redhist + RGB_hist(:,1);
@@ -40,7 +40,7 @@ end
 % Sum up all the histogram columns (produces a vector of similarities)
 % Find the smallest distance
 % Return the index of that distance
-distances = red_distances + green_distances + blue_distances
+distances = red_distances + green_distances + blue_distances;
 [value, imindex] = min(distances);
 
 %% Try converting to HSV??

@@ -10,13 +10,25 @@ Histogram similarity measure
 	- fewer bins means coarser representation
 
 ChiSquared
-	- First run: 49.786s
+	- 97.103s
 	- 250 images
 	- 256 bins
 	- 100x100
 
 Euclidean 
-	- First run: 89.578s
+	- 72.445s
 	- 250 images
 	- 256 bins
+	- 100x100
+
+ChiSquared
+	- 82.199s
+	- 250 images
+	- 100 bins
+	- 100x100
+
+Euclidean 
+	- 62.848s
+	- 250 images
+	- 100 bins
 	- 100x100

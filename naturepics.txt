@@ -1,0 +1,4 @@
+./Wallpapers/canyon.JPG
+./Wallpapers/im3.JPG
+./Wallpapers/im4.JPG
+./Wallpapers/im6.JPG

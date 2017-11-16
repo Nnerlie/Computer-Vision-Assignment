@@ -32,3 +32,7 @@ Euclidean
 	- 250 images
 	- 100 bins
 	- 100x100
+
+k-NN
+	- No explicit training step is required (training is just storing position and label of image)
+	- Change value of k and estimate difference in time

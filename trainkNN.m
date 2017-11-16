@@ -22,8 +22,6 @@ function [features, labels] = trainkNN(manmadefile, naturefile)
 		line = fgetl(nature);
 	end
 	fclose(nature);
-	features
-	labels
 end
 
 function [thres1, thres2] = getThresholds(image_location)

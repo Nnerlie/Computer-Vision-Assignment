@@ -4,25 +4,22 @@ function [features, labels] = trainkNN(manmadefile, naturefile)
 
 	manmade = fopen(manmadefile);
 	line = fgetl(manmade);
-	i = 1;
+    
 	while ischar(line)
 		labels = [labels; 'manmade'];
-		[thresh_v, thresh_h] = getThresholds(line)
+		[thresh_v, thresh_h] = getThresholds(line);
 		features = [features; thresh_v, thresh_h];
 		line = fgetl(manmade);
-		i++;
 	end
 	fclose(manmade);
 
-	i = 1;
 	nature = fopen(naturefile);
 	line = fgetl(nature);
 	while ischar(line)
-		labels = [labels; 'nature'];
-		[thresh_v, thresh_h] = getThresholds(line)
+		labels = [labels; 'natural'];
+		[thresh_v, thresh_h] = getThresholds(line);
 		features = [features; thresh_v, thresh_h];
 		line = fgetl(nature);
-		i++;
 	end
 	fclose(nature);
 	features

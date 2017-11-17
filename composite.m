@@ -1,13 +1,15 @@
+
+
 image = imread('image.jpg');
 
 % split the image into cells
-cells = imageTiler(image, 100, 100);
+cells = Controller.TileImage(image, 100, 100);
 [x, y, z] = size(cells{1,1});
 
 % foreach image comparison
-for i = 1:250
-    I = imread(sprintf('./images/natural/image_ (%d).jpg',i));
-    I = cropImage(I, [x, y]);
+for i = 1:1
+    I = imread(sprintf('./image.jpg'));
+    % I = cropImage(I, [x, y]);
 	I = imgaussfilt(I,2);
     cropped{i} = I;
     

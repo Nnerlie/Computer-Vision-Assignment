@@ -1,10 +1,15 @@
+% 179
+I = rgb2gray(imread('images/natural/image_ (179).jpg'));
+
+[h, thresh_h] = edge(I, 'Sobel', [], 'horizontal');
+[v, thresh_v] = edge(I, 'Sobel', [], 'vertical');
+
+imshowpair(h, v);
+thresh_v
+thresh_h
+
 load fisheriris
-X = meas;    % Use all data for fitting
-Y = species; % Response data
-rng(10);
-
-model = fitcknn(X,Y);
-model.NumNeighbors = 6;
-
-[label,score,cost] = predict(model, X(130,:));
-label
+X = meas;
+Y = species;
+rng(10); % For reproducibility
+Mdl = fitcknn(X,Y,'NumNeighbors',4);

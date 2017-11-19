@@ -3,22 +3,24 @@ classdef CompositeImage
     %   Detailed explanation goes here
     
     properties
-        target
+        target_image
+        source_images
         tiles_x
         tiles_y
         cells
-        source_cropped
+        source_images_cropped
         target_associations
         composite_image
     end
     
     methods
-        function obj = CompositeImage(target, tiles_x, tiles_y)
-            obj.target = imread(target);
+        function obj = CompositeImage(target_image, source_images, tiles_x, tiles_y)
+            obj.target_image = target_image;
+            obj.source_images = source_images;
             obj.tiles_x = tiles_x;
             obj.tiles_y = tiles_y;
             obj.cells = obj.TileImage();
-            [obj.source_cropped, obj.target_associations] = obj.CompareTiles();
+            [obj.source_images_cropped, obj.target_associations] = obj.CompareTiles();
             obj.composite_image = obj.BuildImage();
         end
     end
@@ -26,8 +28,8 @@ classdef CompositeImage
     methods(Access = private)
         function cells = TileImage(obj)
             % Get the image's dimensions
-            [height, width, depth] = size(obj.target);
-            obj.tiles_x
+            [height, width, depth] = size(obj.target_image);
+            
             % The size (px) of each whole row & column block within the image
             tile_width = floor(height / obj.tiles_x);
             tile_height = floor(width / obj.tiles_y);
@@ -42,7 +44,7 @@ classdef CompositeImage
             cells = cells(1:end-1,1:end-1);
         end
         
-        function [source_cropped, target_associations] = CompareTiles(obj)
+        function [source_images_cropped, target_associations] = CompareTiles(obj)
             [x, y, ~] = size(obj.cells{1,1});
 
             % foreach image comparison
@@ -50,7 +52,7 @@ classdef CompositeImage
                 source_image = imread(sprintf('./image.jpg'));
                 source_image = CropImage(obj, source_image, [x, y]);
                 source_image = imgaussfilt(source_image,2);
-                source_cropped{i} = source_image;
+                source_images_cropped{i} = source_image;
 
                 hR = imhist(source_image(:,:,1));
                 hR = hR ./ sum(hR(:));
@@ -72,9 +74,9 @@ classdef CompositeImage
             for x = 1:obj.tiles_x
                 for y = 1:obj.tiles_y
                     if(y == 1)
-                        composite_row = cell2mat(obj.source_cropped(obj.target_associations(x, y)));
+                        composite_row = cell2mat(obj.source_images_cropped(obj.target_associations(x, y)));
                     else
-                        composite_row = cell2mat([composite_row obj.source_cropped(obj.target_associations(x, y))]);
+                        composite_row = cell2mat([composite_row obj.source_images_cropped(obj.target_associations(x, y))]);
                     end
                 end
                 rows{x} = composite_row;

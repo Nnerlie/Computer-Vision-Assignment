@@ -68,6 +68,13 @@ classdef ImageClassifier
     methods(Static, Access = private)
        function [sobel_v, sobel_h] = CalculateThresholds(image)
                 image = rgb2gray(image);
+                [h, ~, ~] = size(image);
+                edges = edge(image,'canny');
+                
+                [H,theta,rho] = hough(edges, 'Theta', -20:0.5:20);
+                peaks  = houghpeaks(H,1000,'threshold',ceil(0.4*max(H(:))));
+                lines = houghlines(edges, theta, rho, peaks,'FillGap',1,'MinLength',h/20);
+                
                 [~, sobel_v] = edge(image, 'Sobel', [], 'vertical');
                 [~, sobel_h] = edge(image, 'Sobel', [], 'horizontal');
         end 

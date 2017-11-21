@@ -50,17 +50,19 @@ classdef CompositeImage
             % foreach image comparison
             for i = 1:1
                 source_image = imread(sprintf('./image.jpg'));
-                source_image = CropImage(obj, source_image, [x, y]);
-                source_image = imgaussfilt(source_image,2);
-                source_images_cropped{i} = source_image;
+				if size(source_image, 3) == 3
+	                source_image = CropImage(obj, source_image, [x, y]);
+    	            source_image = imgaussfilt(source_image,2);
+        	        source_images_cropped{i} = source_image;
 
-                hR = imhist(source_image(:,:,1));
-                hR = hR ./ sum(hR(:));
-                hG = imhist(source_image(:,:,2));
-                hG = hG ./ sum(hG(:));
-                hB = imhist(source_image(:,:,3));
-                hB = hB ./ sum(hB(:));
-                histograms{i} = [hR, hG, hB];
+            	    hR = imhist(source_image(:,:,1));
+                	hR = hR ./ sum(hR(:));
+                	hG = imhist(source_image(:,:,2));
+                	hG = hG ./ sum(hG(:));
+                	hB = imhist(source_image(:,:,3));
+                	hB = hB ./ sum(hB(:));
+                	histograms{i} = [hR, hG, hB];
+				end
             end
             
             for x = 1:obj.tiles_x
@@ -101,22 +103,15 @@ classdef CompositeImage
             m = size(hist_matrix, 2);
             for j = 1 : m
                 RGB_hist = cell2mat(hist_matrix(j));
-				if size(RGB_hist, 3) == 3
-	                red_divide = redhist + RGB_hist(:,1);
-    	            red_divide(red_divide == 0) = 1;
-        	        green_divide = greenhist + RGB_hist(:,2);
-            	    green_divide(green_divide == 0) = 1;
-                	blue_divide = bluehist + RGB_hist(:,3);
-	                blue_divide(blue_divide == 0) = 1;
-    	            red_distances(:,j) = 0.5*sum(((redhist - RGB_hist(:,1)).^2)./red_divide);
-        	        green_distances(:,j) = 0.5*sum(((greenhist - RGB_hist(:,2)).^2)./green_divide);
-            	    blue_distances(:,j) = 0.5*sum(((bluehist - RGB_hist(:,3)).^2)./blue_divide);
-				else
-					red_distances(:,j) = 300;
-					green_distances(:, j) = 300;
-					blue_distances(:, j) = 300;
-				end
-
+	            red_divide = redhist + RGB_hist(:,1);
+    	        red_divide(red_divide == 0) = 1;
+        	    green_divide = greenhist + RGB_hist(:,2);
+            	green_divide(green_divide == 0) = 1;
+                blue_divide = bluehist + RGB_hist(:,3);
+	            blue_divide(blue_divide == 0) = 1;
+    	        red_distances(:,j) = 0.5*sum(((redhist - RGB_hist(:,1)).^2)./red_divide);
+        	    green_distances(:,j) = 0.5*sum(((greenhist - RGB_hist(:,2)).^2)./green_divide);
+            	blue_distances(:,j) = 0.5*sum(((bluehist - RGB_hist(:,3)).^2)./blue_divide);
             end
 
             % Sum up all the histogram columns (produces a vector of similarities)

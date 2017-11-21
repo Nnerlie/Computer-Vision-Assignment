@@ -57,8 +57,8 @@ classdef ImageClassifier
             while ischar(line)
                 Y = [Y; class{1}];
                 image = imread(line);
-                thresholds = ImageClassifier.CalculateThresholds(image);
-                X = [X; thresholds];
+                features = ImageClassifier.GetFeatures(image);
+                X = [X; features];
                 line = fgetl(data);
             end
             fclose(data);
@@ -66,11 +66,48 @@ classdef ImageClassifier
     end
     
     methods(Static, Access = private)
-       function [sobel_v, sobel_h, canny_b] = CalculateThresholds(image)
+		function features = GetFeatures(image)
+				features = CalculateThresholds(image);
+				features = [features, CalculateNumberOfLines(image)];
+		end
+
+       function [sobel_v, sobel_h] = CalculateThresholds(image)
                 image = rgb2gray(image);
+                
                 [~, sobel_v] = edge(image, 'Sobel', [], 'vertical');
                 [~, sobel_h] = edge(image, 'Sobel', [], 'horizontal');
                 [~, canny_b] = edge(image, 'Canny', [], 'both');
         end 
+
+		function lines = CalculateNumberOfLines(image)
+				image = rgb2gray(image);
+                [h, ~, ~] = size(image);
+
+                edges = edge(image,'canny');
+                
+                [H,theta,rho] = hough(edges);
+                peaks  = houghpeaks(H,1000,'threshold',ceil(0.4*max(H(:))));
+                lines = houghlines(edges, theta, rho, peaks,'FillGap',1,'MinLength',h/20);
+				lines = size(lines, 2);
+		end
+
+		function WriteTrainedDataToFile(class_name, features)
+				fileID = fopen(strcat(class_name, '_trained_data.txt'), 'w');
+				for n = 1:size(features, 1)
+						feature_string = sprintf('%d', features(n, :));
+						fprintf(fileID, '%d\n', feature_string);
+				end
+				fclose(fileID);
+		end
+
+		function features = ReadTrainedDataFromFile(class_name)
+				fileID = fopen(strcat(class_name, '_trained_data.txt'));
+				line = fgetl(fileID);
+				features = line;
+				while ischar(line)
+						line = fgetl(fileID);
+						features = [features; line];
+				end
+		end
     end
 end

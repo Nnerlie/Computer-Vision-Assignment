@@ -24,8 +24,22 @@ classdef ImageClassifier
             [labels, scores, costs] = predict(obj.model, X);
         end
         
-        function results = Evaluate(obj, X, Y)
-            
+        function [predictions, scores, costs] = Evaluate(obj, X, Y)
+            [predictions, scores, costs] = obj.Predict(X);
+            hit = false(size(Y, 1), 1);
+            for pos = 1:size(predictions)
+                if (predictions(pos,:) == Y(pos,:))
+                    hit(pos,:) = true;
+                end
+            end
+            correct = 0;
+            for pos = 1:size(hit)
+                if(hit(pos,:))
+                    correct = correct + 1;
+                end
+            end
+            percent = correct / size(hit, 1) * 100
+            correct
         end
     end
     
@@ -57,9 +71,6 @@ classdef ImageClassifier
                 [~, sobel_v] = edge(image, 'Sobel', [], 'vertical');
                 [~, sobel_h] = edge(image, 'Sobel', [], 'horizontal');
                 [~, canny_b] = edge(image, 'Canny', [], 'both');
-                
         end 
     end
-    
 end
-

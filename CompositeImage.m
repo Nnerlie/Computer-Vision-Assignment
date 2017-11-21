@@ -40,7 +40,11 @@ classdef CompositeImage
 
             % convert to cells, last row & column will be uncomplete blocks
             % they are removed to crop the image
-            cells = mat2cell(obj.target, tile_width, tile_height, depth);
+            
+            
+            
+            
+            cells = mat2cell(obj.target_image, tile_width, tile_height, depth);
             cells = cells(1:end-1,1:end-1);
         end
         

@@ -101,15 +101,22 @@ classdef CompositeImage
             m = size(hist_matrix, 2);
             for j = 1 : m
                 RGB_hist = cell2mat(hist_matrix(j));
-                red_divide = redhist + RGB_hist(:,1);
-                red_divide(red_divide == 0) = 1;
-                green_divide = greenhist + RGB_hist(:,2);
-                green_divide(green_divide == 0) = 1;
-                blue_divide = bluehist + RGB_hist(:,3);
-                blue_divide(blue_divide == 0) = 1;
-                red_distances(:,j) = 0.5*sum(((redhist - RGB_hist(:,1)).^2)./red_divide);
-                green_distances(:,j) = 0.5*sum(((greenhist - RGB_hist(:,2)).^2)./green_divide);
-                blue_distances(:,j) = 0.5*sum(((bluehist - RGB_hist(:,3)).^2)./blue_divide);
+				if size(RGB_hist, 3) == 3
+	                red_divide = redhist + RGB_hist(:,1);
+    	            red_divide(red_divide == 0) = 1;
+        	        green_divide = greenhist + RGB_hist(:,2);
+            	    green_divide(green_divide == 0) = 1;
+                	blue_divide = bluehist + RGB_hist(:,3);
+	                blue_divide(blue_divide == 0) = 1;
+    	            red_distances(:,j) = 0.5*sum(((redhist - RGB_hist(:,1)).^2)./red_divide);
+        	        green_distances(:,j) = 0.5*sum(((greenhist - RGB_hist(:,2)).^2)./green_divide);
+            	    blue_distances(:,j) = 0.5*sum(((bluehist - RGB_hist(:,3)).^2)./blue_divide);
+				else
+					red_distances(:,j) = 300;
+					green_distances(:, j) = 300;
+					blue_distances(:, j) = 300;
+				end
+
             end
 
             % Sum up all the histogram columns (produces a vector of similarities)

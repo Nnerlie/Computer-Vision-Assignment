@@ -67,7 +67,7 @@ classdef ImageClassifier
     
     methods(Static, Access = private)
 		function features = GetFeatures(image)
-				features = ClaculateThresholds(image);
+				features = CalculateThresholds(image);
 				features = [features, CalculateNumberOfLines(image)];
 		end
 
@@ -76,6 +76,7 @@ classdef ImageClassifier
                 
                 [~, sobel_v] = edge(image, 'Sobel', [], 'vertical');
                 [~, sobel_h] = edge(image, 'Sobel', [], 'horizontal');
+                [~, canny_b] = edge(image, 'Canny', [], 'both');
         end 
 
 		function lines = CalculateNumberOfLines(image)
@@ -109,7 +110,4 @@ classdef ImageClassifier
 				end
 		end
     end
-    
 end
-
-

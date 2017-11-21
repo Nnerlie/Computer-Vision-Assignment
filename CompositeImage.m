@@ -15,7 +15,7 @@ classdef CompositeImage
     
     methods
         function obj = CompositeImage(target_image, source_images, tiles_x, tiles_y)
-            obj.target_image = target_image;
+            obj.target_image = imread(target_image);
             obj.source_images = source_images;
             obj.tiles_x = tiles_x;
             obj.tiles_y = tiles_y;
@@ -40,31 +40,37 @@ classdef CompositeImage
 
             % convert to cells, last row & column will be uncomplete blocks
             % they are removed to crop the image
-            cells = mat2cell(obj.target, tile_width, tile_height, depth);
+            cells = mat2cell(obj.target_image, tile_width, tile_height, depth);
             cells = cells(1:end-1,1:end-1);
         end
         
         function [source_images_cropped, target_associations] = CompareTiles(obj)
             [x, y, ~] = size(obj.cells{1,1});
-
-            % foreach image comparison
-            for i = 1:1
-                source_image = imread(sprintf('./image.jpg'));
-				if size(source_image, 3) == 3
-	                source_image = CropImage(obj, source_image, [x, y]);
-    	            source_image = imgaussfilt(source_image,2);
-        	        source_images_cropped{i} = source_image;
-
-            	    hR = imhist(source_image(:,:,1));
-                	hR = hR ./ sum(hR(:));
-                	hG = imhist(source_image(:,:,2));
-                	hG = hG ./ sum(hG(:));
-                	hB = imhist(source_image(:,:,3));
-                	hB = hB ./ sum(hB(:));
-                	histograms{i} = [hR, hG, hB];
-				end
-            end
+           
+            data = fopen(obj.source_images);
+            line = fgetl(data);
             
+            i = 1;
+            while ischar(line)
+                source_image = imread(line);
+                if size(source_image, 3) == 3
+                    source_image = CropImage(obj, source_image, [x, y]);
+                    source_image = imgaussfilt(source_image,2);
+                    source_images_cropped{i} = source_image;
+
+                    hR = imhist(source_image(:,:,1));
+                    hR = hR ./ sum(hR(:));
+                    hG = imhist(source_image(:,:,2));
+                    hG = hG ./ sum(hG(:));
+                    hB = imhist(source_image(:,:,3));
+                    hB = hB ./ sum(hB(:));
+                    histograms{i} = [hR, hG, hB];
+                end
+                line = fgetl(data);
+                i = i +1;
+            end
+            fclose(data);
+                      
             for x = 1:obj.tiles_x
                 for y = 1:obj.tiles_y
                     target_associations(x, y) = FindHistogramEuclidean(obj, histograms, cell2mat(obj.cells(x,y)), 256);

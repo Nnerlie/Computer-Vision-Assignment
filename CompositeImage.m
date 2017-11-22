@@ -162,7 +162,7 @@ classdef CompositeImage
             imageSize = [size(image, 1), size(image, 2)];
 
             if (imageSize < tileSize)
-                    image = imresize(image,max([imageSize(1)/tileSize(1), imageSize(2)/tileSize(2)]));
+                    image = imresize(image,max([tileSize(1)/imageSize(1), tileSize(2)/imageSize(2)]));
                     imageSize = [size(image,1), size(image, 2)];
             end
 

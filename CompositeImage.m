@@ -97,7 +97,7 @@ classdef CompositeImage
                     composite_image = [composite_image; cell2mat(rows(x))];
                 end
             end
-            
+            imwrite(composite_image, sprintf('composite_%dx%d.jpg',obj.tiles_x,obj.tiles_y))
             imshow(composite_image);
         end
         

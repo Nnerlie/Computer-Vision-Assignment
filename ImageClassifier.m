@@ -39,8 +39,7 @@ classdef ImageClassifier
                     correct = correct + 1;
                 end
             end
-            percent = correct / labels(hits, 1) * 100;
-            correct;
+            percent = correct / size(X,1) * 100;
         end
     end
     
@@ -68,8 +67,8 @@ classdef ImageClassifier
     
     methods(Static, Access = private)
 		function features = GetFeatures(image)
-				features = ImageClassifier.CalculateThresholds(image);
-				features = [features, ImageClassifier.CalculateNumberOfLines(image)];
+% 				features = ImageClassifier.CalculateThresholds(image);
+ 				features = [ImageClassifier.CalculateNumberOfLines(image)];
 		end
 
        function [sobel_v, sobel_h] = CalculateThresholds(image)
@@ -77,7 +76,6 @@ classdef ImageClassifier
                 
                 [~, sobel_v] = edge(image, 'Sobel', [], 'vertical');
                 [~, sobel_h] = edge(image, 'Sobel', [], 'horizontal');
-                [~, canny_b] = edge(image, 'Canny', [], 'both');
         end 
 
 		function lines = CalculateNumberOfLines(image)

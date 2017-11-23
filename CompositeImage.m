@@ -73,7 +73,7 @@ classdef CompositeImage
                       
             for x = 1:obj.tiles_x
                 for y = 1:obj.tiles_y
-                    target_associations(x, y) = FindHistogramEuclidean(obj, histograms, cell2mat(obj.cells(x,y)), 256);
+                    target_associations(x, y) = FindHistogramChisquared(obj, histograms, cell2mat(obj.cells(x,y)), 256);
                 end
             end
         end

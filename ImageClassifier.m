@@ -90,24 +90,5 @@ classdef ImageClassifier
                 lines = houghlines(edges, theta, rho, peaks,'FillGap',1,'MinLength',h/20);
 				lines = size(lines, 2);
 		end
-
-		function WriteTrainedDataToFile(class_name, features)
-				fileID = fopen(strcat(class_name, '_trained_data.txt'), 'w');
-				for n = 1:size(features, 1)
-						feature_string = sprintf('%d', features(n, :));
-						fprintf(fileID, '%d\n', feature_string);
-				end
-				fclose(fileID);
-		end
-
-		function features = ReadTrainedDataFromFile(class_name)
-				fileID = fopen(strcat(class_name, '_trained_data.txt'));
-				line = fgetl(fileID);
-				features = line;
-				while ischar(line)
-						line = fgetl(fileID);
-						features = [features; line];
-				end
-		end
     end
 end

@@ -24,22 +24,22 @@ classdef ImageClassifier
             [labels, scores, costs] = predict(obj.model, X);
         end
         
-        function [predictions, scores, costs] = Evaluate(obj, X, Y)
-            [predictions, scores, costs] = obj.Predict(X);
-            hit = false(size(Y, 1), 1);
-            for pos = 1:size(predictions)
-                if (predictions(pos,:) == Y(pos,:))
-                    hit(pos,:) = true;
+        function [percent, correct, total] = Evaluate(obj, X, Y)
+            [labels, ~, ~] = obj.Predict(X);
+            total = size(Y, 1);
+            hits = false(total, 1);
+            for pos = 1:size(labels)
+                if (labels(pos,:) == Y(pos,:))
+                    hits(pos,:) = true;
                 end
             end
             correct = 0;
-            for pos = 1:size(hit)
-                if(hit(pos,:))
+            for pos = 1:size(hits)
+                if(hits(pos,:))
                     correct = correct + 1;
                 end
             end
-            percent = correct / size(hit, 1) * 100
-            correct
+            percent = correct / size(X,1) * 100;
         end
     end
     
@@ -53,8 +53,8 @@ classdef ImageClassifier
 
             data = fopen(file_path);
             line = fgetl(data);
-            
             while ischar(line)
+                fprintf("Loading image '%s'\n", line);
                 Y = [Y; class{1}];
                 image = imread(line);
                 features = ImageClassifier.GetFeatures(image);
@@ -67,8 +67,8 @@ classdef ImageClassifier
     
     methods(Static, Access = private)
 		function features = GetFeatures(image)
-				features = CalculateThresholds(image);
-				features = [features, CalculateNumberOfLines(image)];
+% 				features = ImageClassifier.CalculateThresholds(image);
+ 				features = [ImageClassifier.CalculateNumberOfLines(image)];
 		end
 
        function [sobel_v, sobel_h] = CalculateThresholds(image)
@@ -76,7 +76,6 @@ classdef ImageClassifier
                 
                 [~, sobel_v] = edge(image, 'Sobel', [], 'vertical');
                 [~, sobel_h] = edge(image, 'Sobel', [], 'horizontal');
-                [~, canny_b] = edge(image, 'Canny', [], 'both');
         end 
 
 		function lines = CalculateNumberOfLines(image)
@@ -89,6 +88,25 @@ classdef ImageClassifier
                 peaks  = houghpeaks(H,1000,'threshold',ceil(0.4*max(H(:))));
                 lines = houghlines(edges, theta, rho, peaks,'FillGap',1,'MinLength',h/20);
 				lines = size(lines, 2);
+		end
+
+		function WriteTrainedDataToFile(class_name, features)
+				fileID = fopen(strcat(class_name, '_trained_data.txt'), 'w');
+				for n = 1:size(features, 1)
+						feature_string = sprintf('%d', features(n, :));
+						fprintf(fileID, '%d\n', feature_string);
+				end
+				fclose(fileID);
+		end
+
+		function features = ReadTrainedDataFromFile(class_name)
+				fileID = fopen(strcat(class_name, '_trained_data.txt'));
+				line = fgetl(fileID);
+				features = line;
+				while ischar(line)
+						line = fgetl(fileID);
+						features = [features; line];
+				end
 		end
     end
 end

@@ -73,7 +73,7 @@ classdef CompositeImage
                       
             for x = 1:obj.tiles_x
                 for y = 1:obj.tiles_y
-                    target_associations(x, y) = FindHistogramEuclidean(obj, histograms, cell2mat(obj.cells(x,y)), 256);
+                    target_associations(x, y) = FindHistogramChisquared(obj, histograms, cell2mat(obj.cells(x,y)), 256);
                 end
             end
         end
@@ -97,7 +97,7 @@ classdef CompositeImage
                     composite_image = [composite_image; cell2mat(rows(x))];
                 end
             end
-            
+            imwrite(composite_image, sprintf('composite_%dx%d.jpg',obj.tiles_x,obj.tiles_y))
             imshow(composite_image);
         end
         
@@ -162,7 +162,7 @@ classdef CompositeImage
             imageSize = [size(image, 1), size(image, 2)];
 
             if (imageSize < tileSize)
-                    image = imresize(image,max([tileSize(1)/imageSize(1), tileSize(2)/imageSize(2)]));
+                    image = imresize(image,max([imageSize(1)/tileSize(1), imageSize(2)/tileSize(2)]));
                     imageSize = [size(image,1), size(image, 2)];
             end
 
